@@ -9,6 +9,9 @@
 .col blockquote {
     font-size: 75% !important;
     padding: 0 20px;
+}
+
+blockquote {
     text-align: left;
 }
 

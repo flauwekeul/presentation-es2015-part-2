@@ -80,7 +80,38 @@
                         <h2>Iterators and iterables</h2>
                     </section>
                     <section>
+                        <h3>What's an iterator?</h3>
+                        <blockquote cite="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Iterators_and_Generators#Iterators">
+                            <p>
+                                An object is an iterator when it knows how to access items from a collection one at a time, while keeping track of its current position within that sequence.
+                                <span class="fragment" data-fragment-index="1">In JavaScript an iterator is an object that provides a <code>next()</code> method which returns the next item in the sequence. This method returns an object with two properties: <code>done</code> and <code>value</code>.</span>
+                            </p>
+                            <small class="fragment" data-fragment-index="1">
+                                <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Iterators_and_Generators#Iterators">MDN</a>
+                            </small>
+                        </blockquote>
+                    </section>
+                    <section>
+                        <h3>An example</h3>
+                        <pre><code data-trim data-noescape class="js">
+                            const arr = [1, 2, 3]
+                            const iterator = arr[Symbol.iterator]()
 
+                            <span class="fragment">console.log(iterator.next()) // { value: 1, done: false }</span>
+                            <span class="fragment">console.log(iterator.next()) // { value: 2, done: false }</span>
+                            <span class="fragment">console.log(iterator.next()) // { value: 3, done: false }</span>
+
+                            <span class="fragment">console.log(iterator.next()) // { value: undefined, done: true }</span>
+                        </code></pre>
+                        <p class="fragment">Note that <code>done</code> is only <code>true</code> once the last value has returned.</p>
+                    </section>
+                    <section>
+                        <h3>Iterators and iterables?</h3>
+                        <pre><code data-trim data-noescape class="js">
+                            const iterable = [1, 2, 3]
+                            const iteratorProducer = iterable[Symbol.iterator]
+                            const iterator = iteratorProducer()
+                        </code></pre>
                     </section>
                 </section>
 
