@@ -94,23 +94,58 @@
                     <section>
                         <h3>An example</h3>
                         <pre><code data-trim data-noescape class="js">
-                            const arr = [1, 2, 3]
-                            const iterator = arr[Symbol.iterator]()
+                            const array = [1, 2, 3]
+                            const iterator = array[Symbol.iterator]()
 
-                            <span class="fragment">console.log(iterator.next()) // { value: 1, done: false }</span>
-                            <span class="fragment">console.log(iterator.next()) // { value: 2, done: false }</span>
-                            <span class="fragment">console.log(iterator.next()) // { value: 3, done: false }</span>
+                            <span class="fragment" data-fragment-index="1">console.log(iterator.next()) // { value: 1, done: false }</span>
+                            <span class="fragment" data-fragment-index="2">console.log(iterator.next()) // { value: 2, done: false }</span>
+                            <span class="fragment" data-fragment-index="3">console.log(iterator.next()) // { value: 3, done: false }</span>
 
-                            <span class="fragment">console.log(iterator.next()) // { value: undefined, done: true }</span>
+                            <span class="fragment" data-fragment-index="4">console.log(iterator.next()) // { value: undefined, done: true }</span>
+                            <span class="fragment" data-fragment-index="5">
+                            const aNewIterator = array[Symbol.iterator]()
+                            console.log(aNewIterator.next()) // { value: 1, done: false }
+                            </span>
                         </code></pre>
-                        <p class="fragment">Note that <code>done</code> is only <code>true</code> once the last value has returned.</p>
+                        <p class="fragment" data-fragment-index="5">A new fresh iterator can be created from the same iterable.</p>
                     </section>
                     <section>
                         <h3>Iterators and iterables?</h3>
                         <pre><code data-trim data-noescape class="js">
                             const iterable = [1, 2, 3]
-                            const iteratorProducer = iterable[Symbol.iterator]
-                            const iterator = iteratorProducer()
+                            <span class="fragment" data-fragment-index="1">const alsoAnIterable = 'hello'</span>
+                            <span class="fragment" data-fragment-index="2">
+                            const iterator1 = iterable[Symbol.iterator]()
+                            const iterator2 = alsoAnIterable[Symbol.iterator]()
+                            console.log(iterator1) // Array Iterator {}
+                            console.log(iterator2) // StringIterator {}
+                            </span><span class="fragment" data-fragment-index="3">
+                            const notAnIterable = {}
+                            notAnIterable[Symbol.iterator]() // ⚠️ TypeError
+                            </span>
+                        </code></pre>
+                        <p>All arrays are iterable<span class="fragment" data-fragment-index="1">, as are strings <small>(also: maps, sets and generators)</small></span></p>
+                        <p class="fragment" data-fragment-index="2">An iterable is just an object that can produce an iterator.</p>
+                        <p class="fragment" data-fragment-index="3">Regular objects are not iterable by default.</p>
+                    </section>
+                    <section>
+                        <h3>Iterator consumption</h3>
+                        <p>Iterators can be consumed by several JS structures:</p>
+                        <pre><code data-trim data-noescape class="js">
+                            <span class="fragment">const anIterable = 'yeah'</span>
+                            <span class="fragment">
+                            // for..of loops:
+                            for (let value of anIterable) {
+                                // ...
+                            }</span>
+                            <span class="fragment">
+                            // the spread operator:
+                            console.log(...anIterable) // y e a h
+                            </span><span class="fragment">
+                            // array destructuring:
+                            const [ x, y, ...rest ] = anIterable
+                            console.log(x, y, rest) // y e ['a', 'h']
+                            </span>
                         </code></pre>
                     </section>
                 </section>
@@ -120,7 +155,7 @@
                         <h2>Generators</h2>
                     </section>
                     <section>
-
+                        TODO: call next() with params, return() and throw()
                     </section>
                 </section>
 
