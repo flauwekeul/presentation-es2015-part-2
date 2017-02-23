@@ -155,7 +155,54 @@
                         <h2>Generators</h2>
                     </section>
                     <section>
-                        TODO: call next() with params, return() and throw()
+                        <h3>What is it?</h3>
+                        <p class="fragment">A generator is a special function that can be paused to resume execution later. When pausing and resuming, messages can be exchanged.</p>
+                    </section>
+                    <section>
+                        <h3>Syntax</h3>
+                        <pre><code data-trim data-noescape class="js">
+                            function *foo()  { }
+                            <span class="fragment" data-fragment-index="1">function* foo()  { }</span>
+                            <span class="fragment" data-fragment-index="2">function * foo() { }</span>
+                            <span class="fragment" data-fragment-index="3">function*foo()   { }</span>
+                            <span class="fragment" data-fragment-index="4">
+                            const object = {
+                                *foo() { }
+                            }
+                            </span>
+                        </code></pre>
+                        <p class="fragment" data-fragment-index="3">Functionally, it doesn't matter where the <code>*</code> is placed.</p>
+                        <p class="fragment" data-fragment-index="4">The syntax is similar for the concise form.</p>
+                    </section>
+                    <section>
+                        <h3>Using generators</h3>
+                        <div class="cols">
+                            <div class="col">
+                                <pre><code data-trim data-noescape class="js">
+                                    function *foo() {
+                                        console.log('before yield')
+
+                                        <span class="fragment" data-fragment-index="1">yield</span>
+
+                                        console.log('after yield')
+                                    }
+                                    <span class="fragment" data-fragment-index="2">const iterator = foo()</span>
+
+                                    <span class="fragment" data-fragment-index="3">iterator.next()
+                                    // 'before yield'</span>
+                                    <span class="fragment" data-fragment-index="4">iterator.next()
+                                    // 'after yield'</span>
+                                </code></pre>
+                            </div>
+                            <div class="col">
+                                <ul class="small">
+                                    <li class="fragment" data-fragment-index="1">Generators are paused using the <code>yield</code> keyword.</li>
+                                    <li class="fragment" data-fragment-index="2">They are called like regular functions, but they return an iterator.</li>
+                                    <li class="fragment" data-fragment-index="3">When the iterator's <code>next()</code> method is called, the code up to the <code>yield</code> statement is executed.</li>
+                                    <li class="fragment" data-fragment-index="4">When the <code>next()</code> method is called again, the code after the <code>yield</code> statement is executed.</li>
+                                </ul>
+                            </div>
+                        </div>
                     </section>
                 </section>
 
