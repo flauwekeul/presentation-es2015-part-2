@@ -297,7 +297,116 @@
                         <h2>Modules</h2>
                     </section>
                     <section>
-
+                        <h3>Before ES2015</h3>
+                        <p>There are several module patterns.</p>
+                        <ul>
+                            <li class="fragment">
+                                Asynchronous Module Definition (AMD)
+                                <pre><code data-trim class="js">
+                                    define(['someDependency'], function (someDependency) {
+                                        return someFunction() { }
+                                    })
+                                </code></pre>
+                            </li>
+                            <li class="fragment">
+                                CommonJS (mainly used by Node)
+                                <pre><code data-trim class="js">
+                                    const someDependency = require('someDependency')
+                                    module.exports = someFunction() { }
+                                </code></pre>
+                            </li>
+                            <li class="fragment">
+                                Universal Module Definition (UMD): supports both AMD and CommonJS
+                            </li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>Exporting: named exports</h3>
+                        <pre class="fragment" data-fragment-index="1"><code data-trim data-noescape class="js">
+                            export function someFunction() { }
+                            <span class="fragment" data-fragment-index="2">export let someString = 'hey'</span>
+                            <span class="fragment" data-fragment-index="3">
+                            const someArray = [1, 2, 3]
+                            const someNumber = 10
+                            // export multiple members:
+                            export { someArray, someNumber }
+                            </span><span class="fragment" data-fragment-index="4">
+                            // with a different name:
+                            const anotherArray = [4, 5, 6]
+                            export { anotherArray as blah }
+                            </span><span class="fragment" data-fragment-index="5">
+                            // later:
+                            someString = 'something else'
+                            </span>
+                        </code></pre>
+                        <p class="fragment" data-fragment-index="5">Members are exported as <em>bindings</em>: if changed later, the imported value changes too.</p>
+                    </section>
+                    <section>
+                        <h3>Exporting: default exports</h3>
+                        <pre class="fragment" data-fragment-index="1"><code data-trim data-noescape class="js">
+                            function someFunction() { }
+                            export default someFunction
+                            <span class="fragment" data-fragment-index="3">
+                            export function anotherFunction() { }
+                            export function andAnother() { }
+                            </span>
+                        </code></pre>
+                        <ul>
+                            <li class="fragment" data-fragment-index="2">There can be only one <code>default</code> per module</li>
+                            <li class="fragment" data-fragment-index="3">But it's possible to also have more non-default <code>export</code>s</li>
+                        </ul>
+                        <p class="fragment" data-fragment-index="4">My advice:</p>
+                        <ul>
+                            <li class="fragment" data-fragment-index="4">
+                                either have a single default <code>export</code> <strong>or</strong>&hellip;
+                            </li>
+                            <li class="fragment" data-fragment-index="5">
+                                multiple non-default <code>export</code>s per module</p>
+                            </li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>Importing</h3>
+                        <pre class="fragment" data-fragment-index="1"><code data-trim data-noescape class="js">
+                            // import multiple named members:
+                            import { someFunction, someString } from 'someModule'
+                            <span class="fragment" data-fragment-index="2">
+                            // rename an imported member:
+                            import { someArray as array } from 'anotherModule'
+                            </span><span class="fragment" data-fragment-index="3">
+                            // import a single default member:
+                            import someDefault from 'moduleWithDefault'
+                            </span><span class="fragment" data-fragment-index="4">
+                            // import a default member and non-default members:
+                            import anotherDefault, { someNumber, someVar } from 'mixedModule'
+                            </span><span class="fragment" data-fragment-index="5">
+                            // a "namespace import" imports <strong>all</strong> members:
+                            import * as everything from 'lotsOfMembers'
+                            console.log(everything) // { a: 'a', b: 1, c: function c() { } }
+                            </span>
+                        </code></pre>
+                        <p class="fragment" data-fragment-index="6">Imported members are immutable.</p>
+                    </section>
+                    <section>
+                        <h3>Things to keep in mind</h3>
+                        <p>ES2015 modules:</p>
+                        <ul>
+                            <li class="fragment">
+                                &hellip;are <strong>file-based</strong>: one module per file.
+                            </li>
+                            <li class="fragment">
+                                &hellip;are <strong>static</strong>: members can't be added/removed dynamically.
+                            </li>
+                            <li class="fragment">
+                                &hellip;are <strong>singletons</strong>: there's one instance of each module, which maintains its state.
+                            </li>
+                            <li class="fragment">
+                                &hellip;support <strong>circular dependencies</strong>: e.g. A imports B and B imports A.
+                            </li>
+                            <li class="fragment">
+                                &hellip;are <strong>very difficult to implement</strong>: no JS runtime currently supports modules.
+                            </li>
+                        </ul>
                     </section>
                 </section>
 
