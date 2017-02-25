@@ -124,9 +124,17 @@
                             notAnIterable[Symbol.iterator]() // ⚠️ TypeError
                             </span>
                         </code></pre>
-                        <p>All arrays are iterable<span class="fragment" data-fragment-index="1">, as are strings <small>(also: maps, sets and generators)</small></span></p>
-                        <p class="fragment" data-fragment-index="2">An iterable is just an object that can produce an iterator.</p>
-                        <p class="fragment" data-fragment-index="3">Regular objects are not iterable by default.</p>
+                        <ul>
+                            <li>
+                                All arrays are iterable<span class="fragment" data-fragment-index="1">, as are strings. <small>(also: maps, sets and generators)</small></span>
+                            </li>
+                            <li class="fragment" data-fragment-index="2">
+                                An iterable is just an object that can produce an iterator.
+                            </li>
+                            <li class="fragment" data-fragment-index="3">
+                                Regular objects are not iterable by default.
+                            </li>
+                        </ul>
                     </section>
                     <section>
                         <h3>Iterator consumption</h3>
@@ -156,7 +164,7 @@
                     </section>
                     <section>
                         <h3>What is it?</h3>
-                        <p class="fragment">A generator is a special function that can be paused to resume execution later. When pausing and resuming, messages can be exchanged.</p>
+                        <p class="fragment">A generator is a special function that can be paused to resume execution later. When pausing and resuming, values can be exchanged.</p>
                     </section>
                     <section>
                         <h3>Syntax</h3>
@@ -179,14 +187,15 @@
                         <div class="cols">
                             <div class="col">
                                 <pre><code data-trim data-noescape class="js">
-                                    function *foo() {
+                                    function *aGenerator() {
                                         console.log('before yield')
 
                                         <span class="fragment" data-fragment-index="1">yield</span>
 
                                         console.log('after yield')
                                     }
-                                    <span class="fragment" data-fragment-index="2">const iterator = foo()</span>
+
+                                    <span class="fragment" data-fragment-index="2">const iterator = aGenerator()</span>
 
                                     <span class="fragment" data-fragment-index="3">iterator.next()
                                     // 'before yield'</span>
@@ -204,6 +213,83 @@
                             </div>
                         </div>
                     </section>
+                    <section>
+                        <h3>Exchanging values</h3>
+                        <pre><code data-trim data-noescape class="js">
+                            function *passValues() {
+                                const received = yield 'output'
+                                console.log('received: ', received)
+                            }
+
+                            const iterator = passValues()
+                            <span class="fragment" data-fragment-index="1">
+                            console.log(iterator.next()) // { value: 'output', done: false }</span>
+                            <span class="fragment" data-fragment-index="2">console.log(iterator.next('input'))
+                            // 'received: input'
+                            // { value: undefined, done: true }</span>
+                        </code></pre>
+                        <ul>
+                            <li class="fragment" data-fragment-index="1">
+                                Once the code reaches <code>yield</code>, it sends out a value.
+                            </li>
+                            <li class="fragment" data-fragment-index="2">
+                                When the generator is resumed, a value can be passed to the <code>next()</code> method.
+                                This "replaces" the whole <code>yield</code> statement.
+                            </li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3><code>return()</code></h3>
+                        <pre><code data-trim data-noescape class="js">
+                            function *generator() {
+                                try {
+                                    yield 1
+                                    yield 2
+                                } finally {
+                                    console.log('done')
+                                }
+                            }
+                            const iterator = generator()
+                            <span class="fragment" data-fragment-index="1">console.log(iterator.next()) // { value: 1, done: false }</span>
+                            <span class="fragment" data-fragment-index="2">console.log(iterator.return('abort'))</span>
+                            <span class="fragment" data-fragment-index="3">// 'done'</span>
+                            <span class="fragment" data-fragment-index="4">// { value: 'abort', done: true }</span>
+                            <span class="fragment" data-fragment-index="5">console.log(iterator.next()) // { value: undefined, done: true }</span>
+                        </code></pre>
+                        <p class="fragment" data-fragment-index="2">
+                            <code>return()</code> optionally accepts a value<span class="fragment" data-fragment-index="3">, executes the <code>finally</code> block (if any)</span><span class="fragment" data-fragment-index="4">, returns that value</span><span class="fragment" data-fragment-index="5"> and aborts the generator.</span>
+                        </p>
+                    </section>
+                    <section>
+                        <h3><code>throw()</code></h3>
+                        <pre><code data-trim data-noescape class="js">
+                            function *generator() {
+                                try {
+                                    yield 1
+                                    yield 2
+                                } catch (error) {
+                                    console.log(error)
+                                }
+                            }
+                            const iterator = generator()
+                            <span class="fragment" data-fragment-index="1">console.log(iterator.next()) // { value: 1, done: false }</span>
+                            <span class="fragment" data-fragment-index="2">console.log(iterator.throw('exception!'))</span>
+                            <span class="fragment" data-fragment-index="3">// 'exception!'
+                            // { value: undefined, done: true }</span>
+                            <span class="fragment" data-fragment-index="4">console.log(iterator.next()) // { value: undefined, done: true }</span>
+                        </code></pre>
+                        <p class="fragment" data-fragment-index="2">
+                            <code>throw()</code> also optionally accepts a value<span class="fragment" data-fragment-index="3">, executes the <code>catch</code> block (if any)</span><span class="fragment" data-fragment-index="4"> and aborts the generator.</span>
+                        </p>
+                    </section>
+                    <!-- <section>
+                        <h3>Yield delegation</h3>
+                        <p>TODO</p>
+                    </section>
+                    <section>
+                        <h3>Synchronous looking asynchronicity</h3>
+                        <p>TODO</p>
+                    </section> -->
                 </section>
 
                 <section id="modules">
