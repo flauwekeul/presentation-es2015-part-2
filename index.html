@@ -538,7 +538,114 @@
                         <h2><code>Map</code>s and <code>Set</code>s</h2>
                     </section>
                     <section>
-
+                        <h3><code>Map()</code></h3>
+                        <p class="fragment">
+                            Maps are like objects, but the keys can be of any type.
+                        </p>
+                        <pre class="fragment"><code data-trim data-noescape class="js">
+                            const map = new Map()
+                            <span class="fragment">const someNumber = 1
+                            const someObject = { b: 2 }
+                            </span><span class="fragment">
+                            map.set(someNumber,  'a number')
+                            map.set(someObject, 'an object')
+                            </span><span class="fragment">
+                            console.log(map.has(someNumber)) // true</span>
+                            <span class="fragment">console.log(map.get(someNumber), map.get(someObject))
+                            // 'a number', 'an object'
+                            </span><span class="fragment">console.log(map.size) // 2
+                            </span><span class="fragment">console.log(map.delete(someNumber)) // true
+                            </span><span class="fragment">
+                            map.clear()
+                            console.log(map.size) // 0
+                            </span>
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h3>Maps and iterators</h3>
+                        <p class="fragment">
+                            A <code>Map</code> can be created from an iterable where each item is an array with a key and a value:
+                        </p>
+                        <pre class="fragment"><code data-trim data-noescape class="js">
+                            const map = new Map([
+                                [ { a: 1 }, 'first' ],
+                                [ { b: 2 }, 'second' ]
+                            ])<span class="fragment">
+                            // entries() returns an iterator with the same format:
+                            console.log(map.entries())
+                            // MapIterator { [ Object, 'first' ], [ Object, 'second' ] }
+                            </span><span class="fragment">
+                            // this makes it easy to copy maps:
+                            const newMap = new Map(map)
+                            console.log(newMap === map) // false
+                            </span><span class="fragment">
+                            console.log(map.values()) // MapIterator { 'first', 'second' }
+                            </span><span class="fragment">console.log(map.keys())
+                            // MapIterator { Object {a: 1}, Object {b: 2} }
+                            </span>
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h3><code>Set()</code></h3>
+                        <p class="fragment">
+                            Sets are like arrays, but all items are unique.
+                        </p>
+                        <pre class="fragment"><code data-trim data-noescape class="js">
+                            const set = new Set()
+                            <span class="fragment">const someNumber = 1
+                            const someObject = { b: 2 }
+                            </span><span class="fragment">
+                            set.add(someNumber)
+                            set.add(someObject)
+                            set.add(someNumber) // duplicate
+                            </span><span class="fragment">
+                            // duplicates are ignored:
+                            console.log(set.size) // 2</span>
+                            <span class="fragment">console.log(set.has(someNumber)) // true</span>
+                            <span class="fragment">console.log(set.delete(someNumber)) // true
+                            </span><span class="fragment">
+                            set.clear()
+                            console.log(set.size) // 0
+                            </span>
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h3>Sets and iterators</h3>
+                        <p class="fragment">
+                            A <code>Set</code> can be created from an iterable too:
+                        </p>
+                        <pre class="fragment"><code data-trim data-noescape class="js">
+                            const set = new Set([ { a: 1 }, 'second', 3 ])
+                            <span class="fragment">
+                            // sets have the same iterator methods:
+                            const entries = set.entries()
+                            const values = set.values()
+                            const keys = set.keys()
+                            </span><span class="fragment">
+                            // &hellip;which are symmetric to maps:
+                            </span>
+                            <span class="fragment">console.log(entries)
+                            // SetIterator { [Object, Object], ['second', 'second'], [3, 3] }</span>
+                            <span class="fragment">console.log(values)
+                            // SetIterator { Object { a: 1 }, 'second', 3 }</span>
+                            <span class="fragment">console.log(keys)
+                            // SetIterator { Object { a: 1 }, 'second', 3 }
+                            </span>
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h3><code>WeakMap()</code> and <code>WeakSet()</code></h3>
+                        <ul>
+                            <li class="fragment">
+                                A <code>WeakMap</code>'s <strong>keys</strong> and a <code>WeakSet</code>'s <strong>values</strong> are held <em>weakly</em>; they can be <em>garbage collected</em>.
+                            </li>
+                            <li class="fragment">
+                                A <code>WeakMap</code>'s <strong>keys</strong> and a <code>WeakSet</code>'s <strong>values</strong> can <em>only</em> be objects (including arrays, functions, etc.).
+                            </li>
+                            <li class="fragment">
+                                Both lack a <code>size</code> property, <code>clear()</code> method and iterator methods.
+                            </li>
+                        </ul>
                     </section>
                 </section>
 
