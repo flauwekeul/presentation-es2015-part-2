@@ -415,7 +415,121 @@
                         <h2>"Classes"</h2>
                     </section>
                     <section>
+                        <h3>Not really though 😒</h3>
+                        <p class="fragment" data-fragment-index="1">The word "class" implies <em>class inheritance</em>, but JS still has <em>prototypal inheritance</em>.</p>
+                        <pre class="fragment" data-fragment-index="2"><code data-trim data-noescape class="js">
+                        class Foo {}
+                        console.log(typeof Foo) // function
+                        </code></pre>
+                        <p class="fragment" data-fragment-index="2"><code>class</code> is just syntactic sugar for a constructor function.</p>
+                    </section>
+                    <section>
+                        <h3><code>class</code> vs. constructor function</h3>
+                        <div class="cols">
+                            <div class="col fragment small" data-fragment-index="1">
+                                <pre><code data-trim data-noescape class="js">
+                                    class FooClass {
+                                        constructor (a, b) {
+                                            this.a = a
+                                            this.b = b
+                                        }<span class="fragment" data-fragment-index="6"> // ← no comma</span>
 
+                                        aTimesB() {
+                                            return this.a * this.b
+                                        }
+                                    }
+
+                                    const foo = new FooClass(2, 3)
+                                    console.log(foo.aTimesB()) // 6
+                                </code></pre>
+                            </div>
+                            <div class="col fragment small" data-fragment-index="2">
+                                <pre><code data-trim data-noescape class="js">
+                                    function FooConstructor(a, b) {
+                                        this.a = a
+                                        this.b = b
+                                    }
+
+                                    FooConstructor.prototype.aTimesB =
+                                        function () {
+                                            return this.a * this.b
+                                        }
+
+
+                                    const foo = new FooConstructor(2, 3)
+                                    console.log(foo.aTimesB()) // 6
+                                </code></pre>
+                            </div>
+                        </div>
+                        <p class="fragment" data-fragment-index="3">Some differences:</p>
+                        <ul>
+                            <li class="fragment" data-fragment-index="4">
+                                Instantiating a <code>class</code> <em>must</em> be done with <code>new</code>.
+                            </li>
+                            <li class="fragment" data-fragment-index="5">
+                                A (constructor) function is hoisted, a <code>class</code> is not.
+                            </li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3><code>extends</code> and <code>super</code></h3>
+                        <pre class="fragment" data-fragment-index="1"><code data-trim data-noescape class="js small">
+                            class Bar extends FooClass {
+                                constructor (a, b, c) {
+                                    super(a, b)<span class="fragment" data-fragment-index="2"> // here super refers to parent <strong>constructor</strong>: FooClass</span>
+                                    this.c = c
+                                }
+
+                                aTimesBTimesC() {
+                                    <span class="fragment" data-fragment-index="3">// here super refers to parent <strong>object</strong>: FooClass.prototype</span>
+                                    return super.aTimesB() * this.c
+                                }
+                            }
+
+                            const bar = new Bar(2, 3, 4)
+                            console.log(bar.aTimesBTimesC()) // 24
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h3>Some nuances</h3>
+                        <ul>
+                            <li class="fragment">
+                                <code>super</code> can't be dynamically bound like <code>this</code> can.
+                            </li>
+                            <li class="fragment">
+                                When a class doesn't have a constructor, a default constructor is used. In case of a subclass, the default constructor calls the parent constructor:
+                                <pre><code data-trim class="js">
+                                    constructor(...args) {
+                                        super(...args)
+                                    }
+                                </code></pre>
+                            </li>
+                            <li class="fragment">
+                                In the constructor of a subclass, you cannot access <code>this</code> until <code>super()</code> has been called.
+                            </li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3><code>static</code> methods</h3>
+                        <pre class="fragment"><code data-trim data-noescape class="js">
+                            class Parent {
+                                static foo() { console.log('foo') }
+                            }
+                            <span class="fragment">
+                            class Child extends Parent {
+                                static bar() {
+                                    super.foo()
+                                    console.log('bar')
+                                }
+                            }</span>
+
+                            <span class="fragment">console.log(Parent.foo()) // 'foo'</span>
+                            <span class="fragment">console.log(Child.foo())  // 'foo'</span>
+                            <span class="fragment">console.log(Child.bar())  // 'foo' 'bar'</span>
+                        </code></pre>
+                        <p class="fragment">
+                            This works because not only <code>Child.prototype</code> is prototype-linked to <code>Parent.prototype</code>, but <code>Child()</code> is prototype-linked to <code>Parent()</code> too.
+                        </p>
                     </section>
                 </section>
 
