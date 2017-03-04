@@ -652,7 +652,121 @@
                         <h2>API additions</h2>
                     </section>
                     <section>
+                        <h3><code>Array.from()</code></h3>
+                        <p>Converts <em>array-like</em> objects into arrays:</p>
+                        <pre class="fragment"><code data-trim data-noescape class="js">
+                            const arrayLike = {
+                                length: 4,
+                                2: 'third'
+                            }
+                            console.log(Array.from(arrayLike))
+                            // [undefined, undefined, 'third', undefined]
+                            <span class="fragment">
+                            // Array.from accepts a map function:
+                            const mapper = item => item && item.toUpperCase()
+                            console.log(Array.from(arrayLike, mapper))
+                            // [undefined, undefined, 'THIRD', undefined]
+                            </span>
+                        </code></pre>
+                        <p class="fragment">Many DOM methods and <code>arguments</code> inside functions are examples of array-like objects.</p>
+                    </section>
+                    <section>
+                        <h3><code>Array.copyWithin()</code></h3>
+                        <p>Copies a part of an array to another location in the same array. The arguments:</p>
+                        <ol class="fragment">
+                            <li><em>target</em>: the index to copy to</li>
+                            <li class="fragment"><em>start</em>: the inclusive index to start copying</li>
+                            <li class="fragment"><em>end</em><small>optional</small>: the exclusive index to stop copying</li>
+                        </ol>
+                        <pre class="fragment"><code data-trim data-noescape class="js">
+                            [1, 2, 3, 4, 5].copyWithin(0, 3)<span class="fragment">      // [1, 2, 3, 1, 2]</span>
+                            <span class="fragment">[1, 2, 3, 4, 5].copyWithin(0, 3, 1)</span><span class="fragment">   // [1, 2, 3, 1, 5]</span>
+                            <span class="fragment">// negative arguments start at the end of the array
+                            [1, 2, 3, 4, 5].copyWithin(0, -2)</span><span class="fragment">     // [4, 5, 3, 4, 5]</span>
+                            <span class="fragment">[1, 2, 3, 4, 5].copyWithin(0, -2, -1)</span> <span class="fragment">// [4, 2, 3, 4, 5]</span>
+                            </span>
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h3><code>Array.prototype.fill()</code></h3>
+                        <p>Fills an array with the passed value:</p>
+                        <pre class="fragment"><code data-trim data-noescape class="js">
+                            const array = Array.from({ length: 4 })
+                            console.log(array.fill(1)) // [ 1, 1, 1, 1 ]
+                            <span class="fragment">
+                            // optionally takes a start and end argument:
+                            console.log(array.fill(1, 1, 3))
+                            <span class="fragment">// [ undefined, 1, 1, undefined ]</span>
+                            </span>
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h3><code>Array.prototype.find()</code></h3>
+                        <p>Finds a value in an array:</p>
+                        <pre class="fragment"><code data-trim data-noescape class="js">
+                            const array = [1, 2, 3, 4, 5]
+                            console.log(array.find(val => val === 3)) // 3
+                            <span class="fragment">
+                            // always returns the first match:
+                            console.log(array.find(val => val > 3)) <span class="fragment">  // 4</span>
+                            </span>
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h3><code>Object.setPrototypeOf()</code></h3>
+                        <pre class="fragment"><code data-trim data-noescape class="js">
+                            const object1 = {
+                                hello() {
+                                    console.log('hello')
+                                }
+                            }
+                            const object2 = {}
+                            <span class="fragment">
+                            Object.setPrototypeOf(object2, object1)
+                            console.log(object2.hello()) // 'hello'
+                            </span>
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h3><code>Object.assign()</code></h3>
+                        <p class="fragment">
+                            Returns a new object where each <em>source</em> object's <em>own</em> properties are copied:
+                        </p>
+                        <pre class="fragment"><code data-trim data-noescape class="js">
+                            let result = Object.assign({}, { a: 1 }, { b: 2 })
+                            <span class="fragment">console.log(result) // { a: 1, b: 2 }</span>
+                            <span class="fragment">
+                            // later arguments "win":
+                            result = Object.assign({}, { a: 1 }, { a: 2 })
+                            console.log(result)</span><span class="fragment"> // { a: 2 }</span>
+                            <span class="fragment">
+                            // "inherited" properties aren't copied
+                            const object = Object.setPrototypeOf({}, { a: 'other prototype' })</span>
+                            <span class="fragment">result = Object.assign({ a: 'target' }, object)
+                            console.log(result)</span><span class="fragment"> // { a: 'target' }</span>
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h3><code>String.prototype.repeat()</code></h3>
+                        <pre class="fragment"><code data-trim data-noescape class="js">
+                            console.log('derptie'.repeat(3)) // 'derptiederptiederptie'
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h3><code>String</code> inspection functions</h3>
+                        <pre class="fragment" data-fragment-index="1"><code data-trim data-noescape class="js">
+                            const string = 'Hey there!'
 
+                            <span class="fragment" data-fragment-index="2">console.log(string.startsWith('Hey'))      // true</span>
+                            <span class="fragment" data-fragment-index="6">console.log(string.startsWith('there', 4)) // true</span>
+
+                            <span class="fragment" data-fragment-index="3">console.log(string.endsWith('there!'))     // true</span>
+                            <span class="fragment" data-fragment-index="7">console.log(string.endsWith('Hey', 3))     // true</span>
+
+                            <span class="fragment" data-fragment-index="4">console.log(string.includes('th'))         // true</span>
+                            <span class="fragment" data-fragment-index="8">console.log(string.includes('Hey', 4))     // false</span>
+                        </code></pre>
+                        <p class="fragment" data-fragment-index="5">These functions accept an optional <em>start</em> index.</p>
                     </section>
                 </section>
 
