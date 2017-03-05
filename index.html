@@ -784,21 +784,104 @@
                         </p>
                         <pre class="fragment"><code data-trim data-noescape class="js">
                             const handler = {
-                                get: function(target, name) {
-                                    if (name in target) {
-                                        return target[name]
-                                    } else {
-                                        return 'default'
-                                    }
+                                get: function(target, key) {
+                                    return key in target ?
+                                        target[key] :
+                                        'default'
                                 }
                             }
                             const proxy = new Proxy({}, handler)
 
                             <span class="fragment">proxy.a = 1
                             proxy.b = undefined</span>
-                            <span class="fragment">console.log(proxy.a, proxy.b) // 1, undefined</span>
-                            <span class="fragment">console.log(proxy.c)          // 'default'</span>
+                            <span class="fragment">console.log(proxy.a) // 1</span>
+                            <span class="fragment">console.log(proxy.b) // undefined</span>
+                            <span class="fragment">console.log(proxy.c) // 'default'</span>
                         </code></pre>
+                        <p class="fragment">There are many so called <em><a href="https://developer.mozilla.org/nl/docs/Web/JavaScript/Reference/Global_Objects/Proxy#Methods_of_the_handler_object">traps</a></em>.</p>
+                    </section>
+                    <section>
+                        <h3>Revocable proxies</h3>
+                        <p class="fragment">Creating proxies that can be revoked later is done a little different:</p>
+                        <pre class="fragment"><code data-trim data-noescape class="js">
+                            const handler = {
+                                get: function(target, key) {
+                                    console.log(`accessing: ${key}`)
+                                    return target[key]
+                                }
+                            }
+                            // the static method revocable returns an object:
+                            const { proxy, revoke } = Proxy.revocable({}, handler)
+                            <span class="fragment">
+                            proxy.a = 1
+                            proxy.a // 'accessing: a'
+                            </span><span class="fragment">
+                            revoke()
+                            console.log(proxy.a) // ⚠️ TypeError
+                            </span>
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h3>Possible usage</h3>
+                        <ul>
+                            <li class="fragment">
+                                Extension: let the proxy add common behavior to objects, e.g. logging.
+                            </li>
+                            <li class="fragment">
+                                Validation/filtering: let the proxy decide what goes in the target object.
+                            </li>
+                            <li class="fragment">
+                                Fallback: let the proxy handle non-existing methods of the target object. <span class="fragment">To achieve this, add the proxy to the object's prototype chain.</span>
+                            </li>
+                            <li class="fragment">
+                                <a href="https://developer.mozilla.org/nl/docs/Web/JavaScript/Reference/Global_Objects/Proxy#Examples">More</a> and <a href="http://www.2ality.com/2014/12/es6-proxies.html#use-cases-for-proxies">more</a>&hellip;
+                            </li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3><code>Reflect</code> maps <code>Proxy</code> traps</h3>
+                        <p class="fragment">
+                            <code>Reflect</code> is a static object to better forward proxy traps.
+                        </p>
+                        <pre class="fragment"><code data-trim data-noescape class="js">
+                            const target = {
+                                get foo() { return this.bar },
+                                bar: 'bar'
+                            }<span class="fragment">
+                            const handler = {
+                                get(target, key, receiver) {
+                                    if (key === 'bar') { return 'proxy bar' }
+                                    console.log('with Reflect: ', Reflect.get(target, key, receiver))
+                                    console.log('without Reflect: ', target[key])
+                                }
+                            }</span><span class="fragment">
+                            const proxy = new Proxy(target, handler)
+                            proxy.foo</span><span class="fragment">
+                            // 'with Reflect: proxy bar'
+                            // 'without Reflect: bar'
+                            </span>
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h3>Functions for keywords</h3>
+                        <p class="fragment">
+                            <code>Reflect</code> has methods for operations that were previously only possible using keywords:
+                        </p>
+                        <pre class="fragment"><code data-trim data-noescape class="js">
+                            const target = { a: 1, b: 2 }
+                            const function SomeConstructor(a, b) { }
+                            <span class="fragment">
+                            delete target.a
+                            Reflect.deleteProperty(target, 'a')
+                            </span><span class="fragment">
+                            new SomeConstructor(1, 2)
+                            Reflect.construct(SomeConstructor, [1, 2])
+                            </span><span class="fragment">
+                            'b' in target
+                            Reflect.has(target, 'b')
+                            </span>
+                        </code></pre>
+                        <p class="fragment">Having functions for keywords is convenient for functional programming.</p>
                     </section>
                 </section>
 
