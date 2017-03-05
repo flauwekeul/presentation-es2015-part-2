@@ -778,7 +778,27 @@
                         </h2>
                     </section>
                     <section>
+                        <h3><code>Proxy</code></h3>
+                        <p class="fragment">
+                            An object that "wraps" another object so that it replaces that object's interface.
+                        </p>
+                        <pre class="fragment"><code data-trim data-noescape class="js">
+                            const handler = {
+                                get: function(target, name) {
+                                    if (name in target) {
+                                        return target[name]
+                                    } else {
+                                        return 'default'
+                                    }
+                                }
+                            }
+                            const proxy = new Proxy({}, handler)
 
+                            <span class="fragment">proxy.a = 1
+                            proxy.b = undefined</span>
+                            <span class="fragment">console.log(proxy.a, proxy.b) // 1, undefined</span>
+                            <span class="fragment">console.log(proxy.c)          // 'default'</span>
+                        </code></pre>
                     </section>
                 </section>
 
