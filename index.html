@@ -137,8 +137,8 @@
                     <section>
                         <h3>Iterator consumption</h3>
                         <p>Iterators can be consumed by several JS structures:</p>
-                        <pre><code data-trim data-noescape class="js">
-                            <span class="fragment">const anIterable = 'yeah'</span>
+                        <pre class="fragment"><code data-trim data-noescape class="js">
+                            const anIterable = 'yeah'
                             <span class="fragment">
                             // for..of loops:
                             for (let value of anIterable) {
@@ -186,11 +186,11 @@
                             <div class="col">
                                 <pre><code data-trim data-noescape class="js">
                                     function *aGenerator() {
-                                        console.log('before yield')
+                                        <span class="fragment" data-fragment-index="1">console.log('before yield')
 
-                                        <span class="fragment" data-fragment-index="1">yield</span>
+                                        yield
 
-                                        console.log('after yield')
+                                        console.log('after yield')</span>
                                     }
 
                                     <span class="fragment" data-fragment-index="2">const iterator = aGenerator()</span>
@@ -205,8 +205,8 @@
                                 <ul class="small">
                                     <li class="fragment" data-fragment-index="1">Generators are paused using the <code>yield</code> keyword.</li>
                                     <li class="fragment" data-fragment-index="2">They are called like regular functions, but they return an iterator.</li>
-                                    <li class="fragment" data-fragment-index="3">When the iterator's <code>next()</code> method is called, the code up to the <code>yield</code> statement is executed.</li>
-                                    <li class="fragment" data-fragment-index="4">When the <code>next()</code> method is called again, the code after the <code>yield</code> statement is executed.</li>
+                                    <li class="fragment" data-fragment-index="3">When the iterator's <code>next()</code> method is called, the code up to the (first) <code>yield</code> statement is executed.</li>
+                                    <li class="fragment" data-fragment-index="4">When the <code>next()</code> method is called again, the code after the (first) <code>yield</code> statement is executed.</li>
                                 </ul>
                             </div>
                         </div>
@@ -255,7 +255,7 @@
                             <span class="fragment" data-fragment-index="5">console.log(iterator.next()) // { value: undefined, done: true }</span>
                         </code></pre>
                         <p class="fragment" data-fragment-index="2">
-                            <code>return()</code> optionally accepts a value<span class="fragment" data-fragment-index="3">, executes the <code>finally</code> block (if any)</span><span class="fragment" data-fragment-index="4">, returns that value</span><span class="fragment" data-fragment-index="5"> and aborts the generator.</span>
+                            <code>return()</code> accepts an optional value<span class="fragment" data-fragment-index="3">, executes the <code>finally</code> block (if any)</span><span class="fragment" data-fragment-index="4">, returns that value</span><span class="fragment" data-fragment-index="5"> and aborts the generator.</span>
                         </p>
                     </section>
                     <section>
@@ -277,17 +277,30 @@
                             <span class="fragment" data-fragment-index="4">console.log(iterator.next()) // { value: undefined, done: true }</span>
                         </code></pre>
                         <p class="fragment" data-fragment-index="2">
-                            <code>throw()</code> also optionally accepts a value<span class="fragment" data-fragment-index="3">, executes the <code>catch</code> block (if any)</span><span class="fragment" data-fragment-index="4"> and aborts the generator.</span>
+                            <code>throw()</code> also accepts an optional value<span class="fragment" data-fragment-index="3">, executes the <code>catch</code> block (if any)</span><span class="fragment" data-fragment-index="4"> and aborts the generator.</span>
                         </p>
                     </section>
-                    <!-- <section>
-                        <h3>Yield delegation</h3>
-                        <p>TODO</p>
-                    </section>
                     <section>
-                        <h3>Synchronous looking asynchronicity</h3>
-                        <p>TODO</p>
-                    </section> -->
+                        <h3>Yield delegation</h3>
+                        <p><code>yield*</code> accepts an iterable and delegates its generators control to its iterator:</p>
+                        <pre class="fragment"><code data-trim data-noescape class="js">
+                            function *delegate() {
+                                yield 1
+                                yield 2
+                                yield 3
+                                return 4
+                            }
+                            function *generator() {
+                                return yield *delegate()
+                            }
+                            const iterator = generator()
+
+                            <span class="fragment">console.log(iterator.next()) // { value: 1, done: false }</span>
+                            <span class="fragment">console.log(iterator.next()) // { value: 2, done: false }</span>
+                            <span class="fragment">console.log(iterator.next()) // { value: 3, done: false }</span>
+                            <span class="fragment">console.log(iterator.next()) // { value: 4, done: true }</span>
+                        </code></pre>
+                    </section>
                 </section>
 
                 <section id="modules">
