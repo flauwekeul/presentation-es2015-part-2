@@ -597,6 +597,21 @@
                         </code></pre>
                     </section>
                     <section>
+                        <h3>Maps vs objects</h3>
+                        <p class="fragment">Use <strong>maps</strong> when:</p>
+                        <ul>
+                            <li class="fragment">you need non-string keys</li>
+                            <li class="fragment">properties are unknown beforehand</li>
+                            <li class="fragment">properties are added/removed dynamically</li>
+                            <li class="fragment">properties need to be iterated</li>
+                        </ul>
+                        <p class="fragment">Use <strong>objects</strong> when:</p>
+                        <ul>
+                            <li class="fragment">properties are static (e.g. function arguments and configuration)</li>
+                            <li class="fragment">values are of different types</li>
+                        </ul>
+                    </section>
+                    <section>
                         <h3><code>Set()</code></h3>
                         <p class="fragment">
                             Sets are like arrays, but all items are unique.
@@ -634,9 +649,8 @@
                             const keys = set.keys()
                             </span><span class="fragment">
                             // &hellip;which are symmetric to maps:
-                            </span>
-                            <span class="fragment">console.log(entries)
-                            // SetIterator { [Object, Object], ['second', 'second'], [3, 3] }</span>
+                            </span><span class="fragment">console.log(entries)
+                            // SetIterator { [Object, Object], ['second', 'second'], [3, 3]}</span>
                             <span class="fragment">console.log(values)
                             // SetIterator { Object { a: 1 }, 'second', 3 }</span>
                             <span class="fragment">console.log(keys)
