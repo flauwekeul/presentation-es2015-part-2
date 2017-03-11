@@ -706,8 +706,8 @@
                             <li class="fragment"><em>end</em><small>optional</small>: the exclusive index to stop copying</li>
                         </ol>
                         <pre class="fragment"><code data-trim data-noescape class="js">
-                            [1, 2, 3, 4, 5].copyWithin(0, 3)<span class="fragment">      // [1, 2, 3, 1, 2]</span>
-                            <span class="fragment">[1, 2, 3, 4, 5].copyWithin(0, 3, 1)</span><span class="fragment">   // [1, 2, 3, 1, 5]</span>
+                            [1, 2, 3, 4, 5].copyWithin(3, 0)<span class="fragment">      // [1, 2, 3, 1, 2]</span>
+                            <span class="fragment">[1, 2, 3, 4, 5].copyWithin(3, 0, 1)</span><span class="fragment">   // [1, 2, 3, 1, 5]</span>
                             <span class="fragment">// negative arguments start at the end of the array
                             [1, 2, 3, 4, 5].copyWithin(0, -2)</span><span class="fragment">     // [4, 5, 3, 4, 5]</span>
                             <span class="fragment">[1, 2, 3, 4, 5].copyWithin(0, -2, -1)</span> <span class="fragment">// [4, 2, 3, 4, 5]</span>
