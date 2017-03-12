@@ -78,36 +78,6 @@
                         <h2>Iterators and iterables</h2>
                     </section>
                     <section>
-                        <h3>What's an iterator?</h3>
-                        <blockquote cite="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Iterators_and_Generators#Iterators">
-                            <p>
-                                An object is an iterator when it knows how to access items from a collection one at a time, while keeping track of its current position within that sequence.
-                                <span class="fragment" data-fragment-index="1">In JavaScript an iterator is an object that provides a <code>next()</code> method which returns the next item in the sequence. This method returns an object with two properties: <code>done</code> and <code>value</code>.</span>
-                            </p>
-                            <small class="fragment" data-fragment-index="1">
-                                <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Iterators_and_Generators#Iterators">MDN</a>
-                            </small>
-                        </blockquote>
-                    </section>
-                    <section>
-                        <h3>An example</h3>
-                        <pre><code data-trim data-noescape class="js">
-                            const array = [1, 2, 3]
-                            const iterator = array[Symbol.iterator]()
-
-                            <span class="fragment" data-fragment-index="1">console.log(iterator.next()) // { value: 1, done: false }</span>
-                            <span class="fragment" data-fragment-index="2">console.log(iterator.next()) // { value: 2, done: false }</span>
-                            <span class="fragment" data-fragment-index="3">console.log(iterator.next()) // { value: 3, done: false }</span>
-
-                            <span class="fragment" data-fragment-index="4">console.log(iterator.next()) // { value: undefined, done: true }</span>
-                            <span class="fragment" data-fragment-index="5">
-                            const aNewIterator = array[Symbol.iterator]()
-                            console.log(aNewIterator.next()) // { value: 1, done: false }
-                            </span>
-                        </code></pre>
-                        <p class="fragment" data-fragment-index="5">A new fresh iterator can be created from the same iterable.</p>
-                    </section>
-                    <section>
                         <h3>Iterators and iterables?</h3>
                         <pre><code data-trim data-noescape class="js">
                             const iterable = [1, 2, 3]
@@ -130,14 +100,51 @@
                                 An iterable is just an object that can produce an iterator.
                             </li>
                             <li class="fragment" data-fragment-index="3">
-                                Regular objects are not iterable by default.
+                                Object literals are not iterable by default.
                             </li>
                         </ul>
                     </section>
                     <section>
+                        <h3>Retrieving an iterator</h3>
+                        <pre><code data-trim data-noescape class="js">
+                            const array = [1, 2, 3]
+                            <span class="fragment" data-fragment-index="3">const iterator = </span><span class="fragment" data-fragment-index="1">array[Symbol.iterator]</span><span class="fragment" data-fragment-index="2">()</span>
+                            <span class="fragment" data-fragment-index="3">console.log(iterator) // Array Iterator {}</span>
+                        </code></pre>
+                        <ul>
+                            <li class="fragment" data-fragment-index="1">The iterator is located at the <code>Symbol.iterator</code> key</li>
+                            <li class="fragment" data-fragment-index="2">that when called&hellip;</li>
+                            <li class="fragment" data-fragment-index="3">returns an iterator.</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>Using an iterator</h3>
+                        <pre><code data-trim data-noescape class="js">
+                            const array = [1, 2, 3]
+                            const iterator = array[Symbol.iterator]()
+
+                            <span class="fragment" data-fragment-index="1">console.log(iterator.next()) // { value: 1, done: false }</span>
+                            <span class="fragment" data-fragment-index="2">console.log(iterator.next()) // { value: 2, done: false }</span>
+                            <span class="fragment" data-fragment-index="3">console.log(iterator.next()) // { value: 3, done: false }</span>
+
+                            <span class="fragment" data-fragment-index="4">console.log(iterator.next()) // { value: undefined, done: true }</span>
+                            <span class="fragment" data-fragment-index="5">
+                            const aNewIterator = array[Symbol.iterator]()
+                            console.log(aNewIterator.next()) // { value: 1, done: false }
+                            </span>
+                        </code></pre>
+                        <ul>
+                            <li class="fragment" data-fragment-index="1">Iterators have a <code>next()</code> method</li>
+                            <li class="fragment" data-fragment-index="2">&hellip;to step through the iterable's values</li>
+                            <li class="fragment" data-fragment-index="3">&hellip;each time it's called</li>
+                            <li class="fragment" data-fragment-index="4">&hellip;until it's done.</li>
+                            <li class="fragment" data-fragment-index="5">New iterators can be created anytime.</li>
+                        </ul>
+                    </section>
+                    <section>
                         <h3>Iterator consumption</h3>
-                        <p>Iterators can be consumed by several JS structures:</p>
-                        <pre class="fragment"><code data-trim data-noescape class="js">
+                        <p>Iterators are consumed by several JS structures:</p>
+                        <pre><code data-trim data-noescape class="js">
                             const anIterable = 'yeah'
                             <span class="fragment">
                             // for..of loops:
@@ -435,96 +442,107 @@
                         <p class="fragment" data-fragment-index="2"><code>class</code> is just syntactic sugar for a constructor function.</p>
                     </section>
                     <section>
-                        <h3><code>class</code> vs. constructor function</h3>
+                        <h3>Constructor function vs <code>class</code></h3>
                         <div class="cols">
                             <div class="col fragment small" data-fragment-index="1">
                                 <pre><code data-trim data-noescape class="js">
-                                    class FooClass {
+                                    function SomeConstructor(a, b) {
+                                        this.a = a
+                                        this.b = b
+                                    }
+
+                                    SomeConstructor.prototype.aTimesB =
+                                        function () {
+                                            return this.a * this.b
+                                        }
+
+
+                                    const obj = new SomeConstructor(2, 3)
+                                    console.log(obj.aTimesB()) // 6
+                                </code></pre>
+                            </div>
+                            <div class="col fragment small" data-fragment-index="2">
+                                <pre><code data-trim data-noescape class="js">
+                                    class SomeClass {
                                         constructor (a, b) {
                                             this.a = a
                                             this.b = b
-                                        }<span class="fragment" data-fragment-index="6"> // ← no comma</span>
+                                        }<span class="fragment" data-fragment-index="3"> // ← no comma</span>
 
                                         aTimesB() {
                                             return this.a * this.b
                                         }
                                     }
 
-                                    const foo = new FooClass(2, 3)
-                                    console.log(foo.aTimesB()) // 6
-                                </code></pre>
-                            </div>
-                            <div class="col fragment small" data-fragment-index="2">
-                                <pre><code data-trim data-noescape class="js">
-                                    function FooConstructor(a, b) {
-                                        this.a = a
-                                        this.b = b
-                                    }
-
-                                    FooConstructor.prototype.aTimesB =
-                                        function () {
-                                            return this.a * this.b
-                                        }
-
-
-                                    const foo = new FooConstructor(2, 3)
-                                    console.log(foo.aTimesB()) // 6
+                                    const obj = new SomeClass(2, 3)
+                                    console.log(obj.aTimesB()) // 6
                                 </code></pre>
                             </div>
                         </div>
-                        <p class="fragment" data-fragment-index="3">Some differences:</p>
+                        <p class="fragment" data-fragment-index="4">Some differences:</p>
                         <ul>
-                            <li class="fragment" data-fragment-index="4">
+                            <li class="fragment" data-fragment-index="5">
                                 Instantiating a <code>class</code> <em>must</em> be done with <code>new</code>.
                             </li>
-                            <li class="fragment" data-fragment-index="5">
+                            <li class="fragment" data-fragment-index="6">
                                 A (constructor) function is hoisted, a <code>class</code> is not.
                             </li>
                         </ul>
                     </section>
                     <section>
                         <h3><code>extends</code> and <code>super</code></h3>
-                        <pre class="fragment" data-fragment-index="1"><code data-trim data-noescape class="js small">
-                            class Bar extends FooClass {
-                                constructor (a, b, c) {
-                                    super(a, b)<span class="fragment" data-fragment-index="2"> // here super refers to parent <strong>constructor</strong>: FooClass</span>
-                                    this.c = c
-                                }
+                        <div class="cols">
+                            <div class="col fragment small" data-fragment-index="1">
+                                <p>parent.js</p>
+                                <pre><code data-trim data-noescape class="js">
+                                    export default class Parent {
+                                        constructor (a, b) {
+                                            this.a = a
+                                            this.b = b
+                                        }
 
-                                aTimesBTimesC() {
-                                    <span class="fragment" data-fragment-index="3">// here super refers to parent <strong>object</strong>: FooClass.prototype</span>
-                                    return super.aTimesB() * this.c
-                                }
-                            }
-
-                            const bar = new Bar(2, 3, 4)
-                            console.log(bar.aTimesBTimesC()) // 24
-                        </code></pre>
-                    </section>
-                    <section>
-                        <h3>Some nuances</h3>
-                        <ul>
-                            <li class="fragment">
-                                <code>super</code> can't be dynamically bound like <code>this</code> can.
-                            </li>
-                            <li class="fragment">
-                                When a class doesn't have a constructor, a default constructor is used. In case of a subclass, the default constructor calls the parent constructor:
-                                <pre><code data-trim class="js">
-                                    constructor(...args) {
-                                        super(...args)
+                                        multiply() {
+                                            return this.a * this.b
+                                        }
                                     }
+
+                                    <span class="fragment" data-fragment-index="2">const parent = new Parent(2, 3)
+                                    console.log(parent.multiply()) // 6</span>
                                 </code></pre>
-                            </li>
-                            <li class="fragment">
-                                In the constructor of a subclass, you cannot access <code>this</code> until <code>super()</code> has been called.
-                            </li>
-                        </ul>
+                            </div>
+                            <div class="col fragment small" data-fragment-index="3">
+                                <p>child.js</p>
+                                <pre><code data-trim data-noescape class="js">
+                                    import Parent from './parent'
+
+                                    class Child extends Parent {
+                                        constructor (a, b, c) {
+                                            <span class="fragment" data-fragment-index="4">// super refers to
+                                            // parent <strong>constructor</strong></span>
+                                            super(a, b)
+                                            this.c = c
+                                        }
+
+                                        multiply() {
+                                            <span class="fragment" data-fragment-index="5">// super refers to
+                                            // parent <strong>prototype</strong></span>
+                                            return super.multiply() * this.c
+                                        }
+                                    }
+
+                                    <span class="fragment" data-fragment-index="6">const child = new Child(2, 3, 4)
+                                    console.log(child.multiply()) // 24</span>
+                                </code></pre>
+                            </div>
+                        </div>
                     </section>
                     <section>
                         <h3><code>static</code> methods</h3>
-                        <pre class="fragment"><code data-trim data-noescape class="js">
+                        <pre class="fragment"><code data-trim data-noescape class="js small">
                             class Parent {
-                                static foo() { console.log('foo') }
+                                static foo() {
+                                    console.log('foo')
+                                }
                             }
                             <span class="fragment">
                             class Child extends Parent {
@@ -538,9 +556,6 @@
                             <span class="fragment">console.log(Child.foo())  // 'foo'</span>
                             <span class="fragment">console.log(Child.bar())  // 'foo' 'bar'</span>
                         </code></pre>
-                        <p class="fragment">
-                            This works because not only <code>Child.prototype</code> is prototype-linked to <code>Parent.prototype</code>, but <code>Child()</code> is prototype-linked to <code>Parent()</code> too.
-                        </p>
                     </section>
                 </section>
 
@@ -719,12 +734,11 @@
                         <p>Fills an array with the passed value:</p>
                         <pre class="fragment"><code data-trim data-noescape class="js">
                             const array = Array.from({ length: 4 })
-                            console.log(array.fill(1)) // [ 1, 1, 1, 1 ]
+                            <span class="fragment">console.log(array.fill(1)) // [ 1, 1, 1, 1 ]</span>
                             <span class="fragment">
                             // optionally takes a start and end argument:
-                            console.log(array.fill(1, 1, 3))
+                            console.log(array.fill(1, 1, 3))</span>
                             <span class="fragment">// [ undefined, 1, 1, undefined ]</span>
-                            </span>
                         </code></pre>
                     </section>
                     <section>
@@ -740,24 +754,21 @@
                         </code></pre>
                     </section>
                     <section>
-                        <h3><code>Object.setPrototypeOf()</code></h3>
+                        <h3 style="font-size: 1.48em"><code>Array.prototype.findIndex()</code></h3>
+                        <p>Finds an index in an array:</p>
                         <pre class="fragment"><code data-trim data-noescape class="js">
-                            const object1 = {
-                                hello() {
-                                    console.log('hello')
-                                }
-                            }
-                            const object2 = {}
+                            const array = [{ a: 1 }, { a: 2 }, { a: 3 }]
+                            console.log(array.findIndex(item => item.a === 2)) // 1
                             <span class="fragment">
-                            Object.setPrototypeOf(object2, object1)
-                            console.log(object2.hello()) // 'hello'
+                            // doesn't work with indexOf
+                            console.log(array.indexOf({ a: 2 })) // -1
                             </span>
                         </code></pre>
                     </section>
                     <section>
                         <h3><code>Object.assign()</code></h3>
                         <p class="fragment">
-                            Returns a new object where each <em>source</em> object's <em>own</em> properties are copied:
+                            Returns a new object where each of the <em>source</em> object's <em>own</em> properties are copied:
                         </p>
                         <pre class="fragment"><code data-trim data-noescape class="js">
                             let result = Object.assign({}, { a: 1 }, { b: 2 })
@@ -768,7 +779,7 @@
                             console.log(result)</span><span class="fragment"> // { a: 2 }</span>
                             <span class="fragment">
                             // "inherited" properties aren't copied
-                            const object = Object.setPrototypeOf({}, { a: 'other prototype' })</span>
+                            const object = Object.setPrototypeOf({}, {a: 'other prototype'})</span>
                             <span class="fragment">result = Object.assign({ a: 'target' }, object)
                             console.log(result)</span><span class="fragment"> // { a: 'target' }</span>
                         </code></pre>
