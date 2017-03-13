@@ -387,19 +387,19 @@
                         <h3>Importing</h3>
                         <pre class="fragment" data-fragment-index="1"><code data-trim data-noescape class="js">
                             // import multiple named members:
-                            import { someFunction, someString } from 'someModule'
+                            import { someFunction, someString } from './someModule'
                             <span class="fragment" data-fragment-index="2">
                             // rename an imported member:
-                            import { someArray as array } from 'anotherModule'
+                            import { someArray as array } from './anotherModule'
                             </span><span class="fragment" data-fragment-index="3">
                             // import a single default member:
-                            import someDefault from 'moduleWithDefault'
+                            import someDefault from './moduleWithDefault'
                             </span><span class="fragment" data-fragment-index="4">
                             // import a default member and non-default members:
-                            import anotherDefault, { someNumber, someVar } from 'mixedModule'
+                            import anotherDefault, { someNumber, someVar } from './mixedModule'
                             </span><span class="fragment" data-fragment-index="5">
                             // a "namespace import" imports <strong>all</strong> members:
-                            import * as everything from 'lotsOfMembers'
+                            import * as everything from './lotsOfMembers'
                             console.log(everything) // { a: 'a', b: 1, c: function c() { } }
                             </span>
                         </code></pre>
@@ -872,7 +872,7 @@
                                 Fallback: let the proxy handle non-existing methods of the target object. <span class="fragment">To achieve this, add the proxy to the object's prototype chain.</span>
                             </li>
                             <li class="fragment">
-                                <a href="https://developer.mozilla.org/nl/docs/Web/JavaScript/Reference/Global_Objects/Proxy#Examples">More</a> and <a href="http://www.2ality.com/2014/12/es6-proxies.html#use-cases-for-proxies">more</a>&hellip;
+                                <a href="http://dealwithjs.io/es6-features-10-use-cases-for-proxy/">And</a> <a href="https://developer.mozilla.org/nl/docs/Web/JavaScript/Reference/Global_Objects/Proxy#Examples">there's</a> <a href="http://www.2ality.com/2014/12/es6-proxies.html#use-cases-for-proxies">more</a>&hellip;
                             </li>
                         </ul>
                     </section>
